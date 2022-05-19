@@ -10,21 +10,35 @@ const r = readline.createInterface({
   output: process.stdout
 });
 
- r.question("Enter your text here", function(answer) {
-
+ r.question("Enter your text here: ", function(answer) {
+	r.on('SIGINT',function(){
+					let writeStream = fs.createWriteStream('02-write-file/secret.txt');
+	  			writeStream.write(answer);
+	 				r.close();
+	  			console.log("End of file");
+	 			})
+			if (answer.includes('exit')){
+				let writeStream = fs.createWriteStream('02-write-file/secret.txt');
+				let ans = answer.replace('exit','');
+	  		writeStream.write(ans);
+	  		console.log("End of file");
+	   		r.close();
+				
+			}
+	 
 		
 	r.on('line',(input) =>{
 		answer += '\n'+ input;
 		r.resume();
 
  		 r.on('SIGINT',function(){
-				let writeStream = fs.createWriteStream('secret.txt');
+				let writeStream = fs.createWriteStream('02-write-file/secret.txt');
   			writeStream.write(answer);
  				r.close();
   			console.log("End of file");
  			})
 		if (answer.includes('exit')){
-			let writeStream = fs.createWriteStream('secret.txt');
+			let writeStream = fs.createWriteStream('02-write-file/secret.txt');
 			let ans = answer.replace('exit','');
   		writeStream.write(ans);
   		console.log("End of file");
