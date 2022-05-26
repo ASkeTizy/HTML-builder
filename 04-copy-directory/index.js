@@ -1,26 +1,35 @@
 const fs = require('node:fs');
 const copyFile = require('node:fs/promises');
 const path = require('path');
-const DIR = './files';
+const DIR = path.join( __dirname, 'files');
+const COPY_DIR=path.join( __dirname, 'files-copy')
 
-if (!fs.exists(__dirname, (e)=>{}) ){
-	fs.mkdir( path.join( __dirname, 'files-copy'), (err) => {});
-fs.readdir(__dirname + '/files', (err, files) => {				
-		files.forEach( file => {
-			fs.copyFile(__dirname + '/files/'+file, __dirname+'/files-copy/'+file, fs.constants.COPYFILE_FICLONE, 
-				(err)=>{
-					if (err) throw err;
-					console.log(file+' '+__dirname+'/files-copy/'+file+' '+fs.constants.COPYFILE_FICLONE)});
-		})
-	})
-}else{
-	fs.readdir(__dirname + '/files', (err, files) => {				
-		files.forEach( file => {
-			fs.copyFile(__dirname + '/files/'+file, __dirname+'/files-copy/'+file, fs.constants.COPYFILE_FICLONE, 
-				(err)=>{
-					if (err) throw err;
-					console.log(file+' '+__dirname+'/files-copy/'+file+' '+fs.constants.COPYFILE_FICLONE)});
-		})
-	})
-}
-	
+fs.access(COPY_DIR, (e) => {
+    if (e) {
+      fs.mkdir( COPY_DIR, (err) => {});      
+      fs.readdir(DIR, (err, files) => {        
+        files.forEach( file => {
+        fs.copyFile(path.join(DIR, file),path.join(DIR_COPY, file),
+          (err)=>{
+            if (err) console.log(err);
+          });
+        })
+      })
+    } else{
+        fs.readdir(COPY_DIR, (err, files) => {       
+          files.forEach( file => {
+            fs.unlink(path.join(COPY_DIR,file),(err) => { 
+              if (err) console.log(err)
+            })
+          })
+        })
+        fs.readdir(DIR, (err, files) => {        
+          files.forEach( file => {
+            fs.copyFile(path.join(DIR, file), path.join(DIR_COPY, file),
+              (err)=>{
+                if (err) console.log(err);
+              });
+          })
+        })
+      }   
+  })
