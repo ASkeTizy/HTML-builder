@@ -25,7 +25,7 @@ fs.access(COPY_DIR, (e) => {
         })
         fs.readdir(DIR, (err, files) => {        
           files.forEach( file => {
-            fs.copyFile(path.join(DIR, file), path.join(DIR_COPY, file),
+            fs.copyFile(path.join(DIR, file), path.join(COPY_DIR, file),
               (err)=>{
                 if (err) console.log(err);
               });
